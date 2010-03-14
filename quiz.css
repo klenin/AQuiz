@@ -1,0 +1,8 @@
+div.question {
+    border: 1px solid black;
+    display: none;
+}
+
+li.variantTemplate {
+    display: none;
+}

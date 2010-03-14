@@ -1,0 +1,43 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="quiz.css" />
+<script src="quiz.js"></script>
+</head>
+<body>
+
+<div id="singleChoice" class="question">
+<div id="singleChoice.text">Question text</div>
+<form id="singleChoice.variants">
+  <ul>
+    <li id="singleChoice.variant.template" class="variantTemplate">
+      <input type="radio" name="variant" /><label>answer text</label>
+    </li>
+  </ul>
+</form>
+</div>
+
+<div id="multiChoice" class="question">
+<div id="multiChoice.text">Question text</div>
+<form id="multiChoice.variants">
+  <ul>
+    <li id="multiChoice.variant.template" class="variantTemplate">
+      <input type="checkbox" name="variant" /><label>answer text</label>
+    </li>
+  </ul>
+</form>
+</div>
+
+<input type="button" id="prevQuestion" value="<" onclick="q.prevQuestion()" />
+<input type="button" id="nextQuestion" value=">" onclick="q.nextQuestion()" />
+
+<script type="text/javascript">
+  var q = new Quiz([
+    new SingleChoiceQuestion({ text: "question 1", variants: [1, 2, 3] }),
+    new SingleChoiceQuestion({ text: "question 2", variants: [4, 5] }),
+    new MultiChoiceQuestion({ text: "question 3", variants: ['abcd', 'evgh', 'fsfas'] }),
+  ]);
+  q.showQuestion();
+</script>
+
+</body>
+</html>
