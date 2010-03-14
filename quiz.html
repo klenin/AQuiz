@@ -1,30 +1,27 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="quiz.css" />
-<script src="quiz.js"></script>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="quiz.js"></script>
 </head>
 <body>
 
-<div id="singleChoice" class="question">
-<div id="singleChoice.text">Question text</div>
-<form id="singleChoice.variants">
-  <ul>
-    <li id="singleChoice.variant.template" class="variantTemplate">
-      <input type="radio" name="variant" /><label>answer text</label>
-    </li>
-  </ul>
-</form>
+<div id="singleChoice" class="question hidden">
+<div class="questionText">Question text</div>
+<ul>
+  <li class="variantTemplate hidden">
+    <input type="radio" name="variant" /><label>answer text</label>
+  </li>
+</ul>
 </div>
 
-<div id="multiChoice" class="question">
-<div id="multiChoice.text">Question text</div>
-<form id="multiChoice.variants">
-  <ul>
-    <li id="multiChoice.variant.template" class="variantTemplate">
-      <input type="checkbox" name="variant" /><label>answer text</label>
-    </li>
-  </ul>
-</form>
+<div id="multiChoice" class="question hidden">
+<div class="questionText">Question text</div>
+<ul>
+  <li class="variantTemplate hidden">
+    <input type="checkbox" name="variant" /><label>answer text</label>
+  </li>
+</ul>
 </div>
 
 <input type="button" id="prevQuestion" value="<" onclick="q.prevQuestion()" />
