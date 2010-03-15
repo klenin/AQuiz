@@ -47,9 +47,12 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
 {
     __constructor: function(src) {
         this.__base(src);
+        this.answer = [];
         if (src.variants)
-            for (var i = 0; i < src.variants.length; ++i)
-                this.variants.push({ text: src.variants[i], checked: false });
+            for (var i = 0; i < src.variants.length; ++i) {
+                this.variants.push(src.variants[i]);
+                this.answer.push(false);
+            }
     },
 
     ui: function() { return $('#multiChoice'); },
@@ -62,8 +65,8 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
         variants.children().not('.variantTemplate').remove();
         for (var i = 0; i < this.variants.length; ++i) {
             var v = variantTemplate.clone().removeClass('hidden variantTemplate');
-            v.children('input').attr({ id: i + 1, checked: this.variants[i].checked });
-            v.children('label').text(this.variants[i].text).attr('for', i + 1);
+            v.children('input').attr({ id: i + 1, checked: this.answer[i] });
+            v.children('label').text(this.variants[i]).attr('for', i + 1);
             variants.append(v);
         }
         ui.show();
@@ -73,7 +76,7 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
         var that = this;
         $('#multiChoice input').each(function(i) {
             if (this.id)
-                that.variants[this.id - 1].checked = this.checked;
+                that.answer[this.id - 1] = this.checked;
         });
     },
 });
