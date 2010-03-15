@@ -1,17 +1,31 @@
-
-var ChoiceQuestion = $.inherit(
+var Question = $.inherit(
 {
     __constructor: function(src) {
         this.text = src.text;
+    },
+
+    ui: function() {},
+
+    show: function() {
+        var ui = this.ui();
+        ui.children('.questionText').text(this.text);
+        ui.show();
+    }
+});
+
+
+var ChoiceQuestion = $.inherit(Question,
+{
+    __constructor: function(src) {
+        this.__base(src);
         this.variants = [];
     },
 
     prepareVariant: function(index, elem) {},
     
     show: function() {
-        var ui = this.ui();
-        ui.children('.questionText').text(this.text);
-        var variants = ui.children('ul');
+        this.__base();
+        var variants = this.ui().children('ul');
         var variantTemplate = variants.children('.variantTemplate');
         variants.children().not('.variantTemplate').remove();
         var that = this;
@@ -22,7 +36,6 @@ var ChoiceQuestion = $.inherit(
             that.prepareVariant(i, elem);
             variants.append(elem);
         });
-        ui.show();
     },
 });
 
