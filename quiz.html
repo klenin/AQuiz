@@ -34,11 +34,7 @@
   $.ajaxSetup({
     beforeSend: function(req) { req.overrideMimeType("application/json"); },
   });
-  var q = new Quiz([
-    new SingleChoiceQuestion({ text: "question 1", variants: [1, 2, 3] }),
-    new SingleChoiceQuestion({ text: "question 2", variants: [4, 5] }),
-    new MultiChoiceQuestion({ text: "question 3", variants: ['abcd', 'evgh', 'fsfas'] }),
-  ]);
+  var q = new Quiz('test.quiz');
   $('[rel^=localize]').localize('lang/quiz');
   q.showQuestion();
 </script>

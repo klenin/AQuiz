@@ -80,9 +80,18 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
 
 var Quiz = $.inherit(
 {
-    __constructor: function(questions) {
-        this.questions = questions;
+    __constructor: function(quizUrl) {
         this.currentQuestion = 0;
+        var that = this;
+        var questionTypes = {
+            sc: SingleChoiceQuestion,
+            mc: MultiChoiceQuestion,
+        };
+        $.getJSON(quizUrl, null, function(quizJSON) {
+            that.questions = $.map(quizJSON, function(v, i) {
+                return new questionTypes[v.type](v);
+            });
+        });
     },
 
     nextOk: function() {

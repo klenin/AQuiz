@@ -1,0 +1,5 @@
+[
+    { "type": "sc", "text": "question 1", "variants": [1, 2, 3] },
+    { "type": "sc", "text": "question 2", "variants": [4, 5] },
+    { "type": "mc", "text": "question 3", "variants": ["abcd", "evgh", "fsfas"] },
+]
