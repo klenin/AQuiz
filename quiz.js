@@ -91,6 +91,27 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
     },
 });
 
+var DirectInputQuestion = $.inherit(Question,
+{
+    __constructor: function(src) {
+        this.__base(src);
+        this.answer = null;
+    },
+    
+    ui: function() { return $('#directInput'); },
+
+    input: function() { return this.ui().children('input')[0]; },
+
+    show: function() {
+        this.__base();
+        this.input().value = this.answer;
+    },
+
+    rememberAnswer: function() {
+        this.answer = this.input().value;
+    },
+});
+
 var Quiz = $.inherit(
 {
     __constructor: function(quizUrl) {
@@ -99,6 +120,7 @@ var Quiz = $.inherit(
         var questionTypes = {
             sc: SingleChoiceQuestion,
             mc: MultiChoiceQuestion,
+            di: DirectInputQuestion,
         };
         $.getJSON(quizUrl, null, function(quizJSON) {
             that.questions = $.map(quizJSON, function(v, i) {
