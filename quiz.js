@@ -3,7 +3,26 @@ var ChoiceQuestion = $.inherit(
 {
     __constructor: function(src) {
         this.text = src.text;
-        this.variants = new Array();
+        this.variants = [];
+    },
+
+    prepareVariant: function(index, elem) {},
+    
+    show: function() {
+        var ui = this.ui();
+        ui.children('.questionText').text(this.text);
+        var variants = ui.children('ul');
+        var variantTemplate = variants.children('.variantTemplate');
+        variants.children().not('.variantTemplate').remove();
+        var that = this;
+        $.each(this.variants, function(i, text) {
+            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
+            elem.children('input').attr('id', i + 1);
+            elem.children('label').text(text).attr('for', i + 1);
+            that.prepareVariant(i, elem);
+            variants.append(elem);
+        });
+        ui.show();
     },
 });
 
@@ -19,19 +38,8 @@ var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
     
     ui: function() { return $('#singleChoice'); },
 
-    show: function() {
-        var ui = this.ui();
-        ui.children('.questionText').text(this.text);
-        var variants = ui.children('ul');
-        var variantTemplate = variants.children('.variantTemplate');
-        variants.children().not('.variantTemplate').remove();
-        for (var i = 0; i < this.variants.length; ++i) {
-            var v = variantTemplate.clone().removeClass('hidden variantTemplate');
-            v.children('input').attr({ id: i + 1, checked: this.answer == i + 1 });
-            v.children('label').text(this.variants[i]).attr('for', i + 1);
-            variants.append(v);
-        }
-        ui.show();
+    prepareVariant: function(index, elem) {
+        elem.children('input')[0].checked = this.answer == index + 1;
     },
 
     rememberAnswer: function() {
@@ -57,19 +65,8 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
 
     ui: function() { return $('#multiChoice'); },
 
-    show: function() {
-        var ui = this.ui();
-        ui.children('.questionText').text(this.text);
-        var variants = ui.children('ul');
-        var variantTemplate = variants.children('.variantTemplate');
-        variants.children().not('.variantTemplate').remove();
-        for (var i = 0; i < this.variants.length; ++i) {
-            var v = variantTemplate.clone().removeClass('hidden variantTemplate');
-            v.children('input').attr({ id: i + 1, checked: this.answer[i] });
-            v.children('label').text(this.variants[i]).attr('for', i + 1);
-            variants.append(v);
-        }
-        ui.show();
+    prepareVariant: function (index, elem) {
+        elem.children('input')[0].checked = this.answer[index];
     },
 
     rememberAnswer: function() {
