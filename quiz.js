@@ -115,7 +115,7 @@ var Quiz = $.inherit(
 
     showQuestion: function() {
         this.questions[this.currentQuestion].show();
-        $('nextQuestion').disabled = !this.nextOk();
-        $('prevQuestion').disabled = !this.prevOk();
+        $('#nextQuestion')[0].disabled = !this.nextOk();
+        $('#prevQuestion')[0].disabled = !this.prevOk();
     },
 });
