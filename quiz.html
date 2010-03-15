@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="quiz.css" />
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="jquery.inherit-1.1.1.js"></script>
+<script type="text/javascript" src="jquery.localize.js"></script>
 <script type="text/javascript" src="quiz.js"></script>
 </head>
 <body>
@@ -25,15 +26,20 @@
 </ul>
 </div>
 
-<input type="button" id="prevQuestion" value="<" onclick="q.prevQuestion()" />
-<input type="button" id="nextQuestion" value=">" onclick="q.nextQuestion()" />
+<input type="button" id="prevQuestion" rel="localize[buttons.prev]" value="<" onclick="q.prevQuestion()" />
+<input type="button" id="nextQuestion" rel="localize[buttons.next]" value=">" onclick="q.nextQuestion()" />
 
 <script type="text/javascript">
+  // Avoid "not well-formed" error when loading JSON from local file.
+  $.ajaxSetup({
+    beforeSend: function(req) { req.overrideMimeType("application/json"); },
+  });
   var q = new Quiz([
     new SingleChoiceQuestion({ text: "question 1", variants: [1, 2, 3] }),
     new SingleChoiceQuestion({ text: "question 2", variants: [4, 5] }),
     new MultiChoiceQuestion({ text: "question 3", variants: ['abcd', 'evgh', 'fsfas'] }),
   ]);
+  $('[rel^=localize]').localize('lang/quiz');
   q.showQuestion();
 </script>
 
