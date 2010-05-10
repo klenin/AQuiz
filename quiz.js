@@ -147,6 +147,7 @@ var Quiz = $.inherit(
         var settings = {
             url: quizUrl,
             dataType: 'json',
+            timeout: 10000,
             success: function(quizJSON) {
                 that.questions = $.map(quizJSON, function(v, i) {
                     return new questionTypes[v.type](v);
