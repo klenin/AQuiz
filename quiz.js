@@ -8,7 +8,7 @@ var Question = $.inherit(
 
     show: function() {
         var ui = this.ui();
-        ui.children('.questionText').text(this.text);
+        ui.children('.questionText').html(this.text);
         ui.show();
     }
 });
@@ -32,7 +32,7 @@ var ChoiceQuestion = $.inherit(Question,
         $.each(this.variants, function(i, text) {
             var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
             elem.children('input').attr('id', i + 1);
-            elem.children('label').text(text).attr('for', i + 1);
+            elem.children('label').html(text).attr('for', i + 1);
             that.prepareVariant(i, elem);
             variants.append(elem);
         });
