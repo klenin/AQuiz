@@ -9,8 +9,13 @@
 </head>
 <body>
 
-<input type="button" class="control" id="prevQuestion" rel="localize[buttons.prev]" value="&lt;" onclick="q.prevQuestion()" />
-<input type="button" class="control" id="nextQuestion" rel="localize[buttons.next]" value="&gt;" onclick="q.nextQuestion()" />
+<div id="controlButtons">
+<input type="button" id="prevQuestion" rel="localize[buttons.prev]" value="&lt;" onclick="q.prevQuestion()" />
+<input type="button" id="nextQuestion" rel="localize[buttons.next]" value="&gt;" onclick="q.nextQuestion()" />
+<span id="questionNumbers">
+  <input type="button" class="hidden" onclick="q.gotoButton(this)" />
+</span>
+</div>
 
 <div id="singleChoice" class="question hidden">
 <div class="questionText">Question text</div>

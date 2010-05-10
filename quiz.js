@@ -126,7 +126,22 @@ var Quiz = $.inherit(
             that.questions = $.map(quizJSON, function(v, i) {
                 return new questionTypes[v.type](v);
             });
+            that.updateButtons();
         });
+    },
+
+    updateButtons: function() {
+        var s = $('#questionNumbers');
+        var btnTemplate = s.children('input');
+        $.each(this.questions, function(i) {
+            s.append(btnTemplate.clone().val(i + 1).show());
+        });
+    },
+
+    gotoButton: function (btn) {
+        this.leaveQuestion();
+        this.currentQuestion = $(btn).val() - 1;
+        this.showQuestion();
     },
 
     nextOk: function() {
@@ -151,15 +166,22 @@ var Quiz = $.inherit(
         this.showQuestion();
     },
 
+    currentGotoButton: function() {
+        var v = (this.currentQuestion + 1);
+        return $('#questionNumbers input.[value=' + v + ']')[0];
+    },
+
     leaveQuestion: function() {
         var q = this.questions[this.currentQuestion];
         q.ui().hide();
         q.rememberAnswer();
+        this.currentGotoButton().disabled = false;
     },
 
     showQuestion: function() {
         this.questions[this.currentQuestion].show();
         $('#nextQuestion')[0].disabled = !this.nextOk();
         $('#prevQuestion')[0].disabled = !this.prevOk();
+        this.currentGotoButton().disabled = true;
     },
 });
