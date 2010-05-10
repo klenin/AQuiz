@@ -9,7 +9,9 @@
 </head>
 <body>
 
-<div id="controlButtons">
+<div id="waiting"><img src="waiting.gif"/></div>
+
+<div id="controlButtons hidden">
 <input type="button" id="prevQuestion" rel="localize[buttons.prev]" value="&lt;" onclick="q.prevQuestion()" />
 <input type="button" id="nextQuestion" rel="localize[buttons.next]" value="&gt;" onclick="q.nextQuestion()" />
 <span id="questionNumbers">
@@ -51,12 +53,12 @@
 <script type="text/javascript">
   // Avoid "not well-formed" error when loading JSON from local file.
   $.ajaxSetup({
-    beforeSend: function(req) { req.overrideMimeType("application/json"); },
+    beforeSend: function(req) { req.overrideMimeType('application/json'); },
   });
-  var args = parseArgs();
-  var q = new Quiz(args['t']);
   $('[rel^=localize]').localize('lang/quiz');
-  q.showQuestion();
+  var args = parseArgs();
+  var q = new Quiz();
+  q.load(args['t']);
 </script>
 
 </body>

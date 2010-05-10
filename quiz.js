@@ -134,19 +134,36 @@ var Quiz = $.inherit(
 {
     __constructor: function(quizUrl) {
         this.currentQuestion = 0;
+        this.questions = [];
+    },
+
+    load: function (quizUrl) {
         var that = this;
         var questionTypes = {
             sc: SingleChoiceQuestion,
             mc: MultiChoiceQuestion,
             di: DirectInputQuestion,
         };
-        $.getJSON(quizUrl, null, function(quizJSON) {
-            that.questions = $.map(quizJSON, function(v, i) {
-                return new questionTypes[v.type](v);
-            });
-            that.updateGotoButtons();
-            that.showCheckAnswers();
-        });
+        var settings = {
+            url: quizUrl,
+            dataType: 'json',
+            success: function(quizJSON) {
+                that.questions = $.map(quizJSON, function(v, i) {
+                    return new questionTypes[v.type](v);
+                });
+                that.updateGotoButtons();
+                that.showCheckAnswers();
+                $('#waiting').hide();
+                $('#controlButtons').show();
+                that.showQuestion();
+            },
+            error: function(req, textStatus, err) {
+                req.abort();
+                setTimeout(
+                    function(q, url) { q.load(url); }, 4000, that, quizUrl);
+            },
+        };
+        $.ajax(settings);
     },
 
     updateGotoButtons: function() {
