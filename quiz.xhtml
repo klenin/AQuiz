@@ -6,6 +6,7 @@
 <script type="text/javascript" src="jquery.inherit-1.1.1.js"></script>
 <script type="text/javascript" src="jquery.localize.js"></script>
 <script type="text/javascript" src="quiz.js"></script>
+<script type="text/javascript" src="config.js"></script>
 </head>
 <body>
 
@@ -56,9 +57,8 @@
     beforeSend: function(req) { req.overrideMimeType('application/json'); },
   });
   $('[rel^=localize]').localize('lang/quiz');
-  var args = parseArgs();
   var q = new Quiz();
-  q.load(args['t']);
+  quiz_init(q);
 </script>
 
 </body>
