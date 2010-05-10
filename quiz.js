@@ -18,6 +18,7 @@ var Question = $.inherit(
 {
     __constructor: function(src) {
         this.text = src.text;
+        this.correct = src.correct;
     },
 
     ui: function() {},
@@ -68,14 +69,15 @@ var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
     ui: function() { return $('#singleChoice'); },
 
     prepareVariant: function(index, elem) {
-        elem.children('input')[0].checked = this.answer == index + 1;
+        elem.children('input')[0].checked = this.answer == index;
     },
 
     rememberAnswer: function() {
         var that = this;
+        this.answer = null;
         $('#singleChoice input').each(function(i) {
             if (this.checked)
-                that.answer = this.id;
+                that.answer = this.id - 1;
         });
     },
 });
@@ -142,11 +144,12 @@ var Quiz = $.inherit(
             that.questions = $.map(quizJSON, function(v, i) {
                 return new questionTypes[v.type](v);
             });
-            that.updateButtons();
+            that.updateGotoButtons();
+            that.showCheckAnswers();
         });
     },
 
-    updateButtons: function() {
+    updateGotoButtons: function() {
         var s = $('#questionNumbers');
         var btnTemplate = s.children('input');
         $.each(this.questions, function(i) {
@@ -154,7 +157,37 @@ var Quiz = $.inherit(
         });
     },
 
-    gotoButton: function (btn) {
+    showCheckAnswers: function() {
+        var show = false;
+        for (var i = 0; i < this.questions.length && !show; ++i)
+            show = this.questions[i].correct != null;
+        if (!show) return;
+        $('#checkAnswersButton').show()[0].disabled = false;
+        var t = $('#checkAnswers table');
+        var rowTemplate = t.children('tr.hidden');
+        for (var i = 0; i < this.questions.length; ++i)
+            t.append(rowTemplate.clone().show());
+    },
+
+    checkAnswers: function() {
+        this.leaveQuestion();
+        var rows = $('#checkAnswers table tr');
+        for (var i = 0; i < this.questions.length; ++i) {
+            var r = $(rows[i + 2]);
+            var td = r.children('td');
+            $(td[0]).text(i + 1);
+            var q = this.questions[i];
+            $(td[1]).text(q.answer == null ? '?' : q.answer + 1);
+            $(td[2]).text(q.correct == null ? '?' : q.correct + 1);
+            r.removeClass('correct wrong');
+            if (q.answer != null && q.correct != null) {
+                r.addClass(q.answer == q.correct ? 'correct' : 'wrong');
+            }
+        }
+        $('#checkAnswers').show();
+    },
+
+    gotoButton: function(btn) {
         this.leaveQuestion();
         this.currentQuestion = $(btn).val() - 1;
         this.showQuestion();
@@ -191,8 +224,10 @@ var Quiz = $.inherit(
         var q = this.questions[this.currentQuestion];
         q.ui().hide();
         q.rememberAnswer();
+        $('#nextQuestion')[0].disabled = true;
+        $('#prevQuestion')[0].disabled = true;
         var b = this.currentGotoButton();
-        if (q.answer)
+        if (q.answer != null)
             b.addClass('answered');
         else
             b.removeClass('answered');
@@ -200,6 +235,7 @@ var Quiz = $.inherit(
     },
 
     showQuestion: function() {
+        $('#checkAnswers').hide();
         this.questions[this.currentQuestion].show();
         $('#nextQuestion')[0].disabled = !this.nextOk();
         $('#prevQuestion')[0].disabled = !this.prevOk();

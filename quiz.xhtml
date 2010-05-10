@@ -15,6 +15,7 @@
 <span id="questionNumbers">
   <input type="button" class="hidden" onclick="q.gotoButton(this)" />
 </span>
+<input type="button" id="checkAnswersButton" class="hidden" value="Check" onclick="q.checkAnswers()" />
 </div>
 
 <div id="singleChoice" class="question hidden">
@@ -38,6 +39,13 @@
 <div id="directInput" class="question hidden">
 <div class="questionText">Question text</div>
 <input type="text" value="" />
+</div>
+
+<div id="checkAnswers" class="hidden">
+<table class="bordered">
+<tr><th>Question</th><th>Answer</th><th>Correct answer</th></tr>
+<tr id="checkAnswerRow" class="hidden"><td></td><td></td><td></td></tr>
+</table>
 </div>
 
 <script type="text/javascript">

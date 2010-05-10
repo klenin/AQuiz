@@ -16,3 +16,10 @@ span#questionNumbers input:disabled {
 }
 
 .hidden { display: none; }
+
+table.bordered { border-collapse: collapse; }
+table.bordered  { border: 1px solid black; }
+table.bordered tr td, table.bordered tr th { border: 1px solid black; }
+
+div#checkAnswers table tr.correct { background-color: #40FF40; }
+div#checkAnswers table tr.wrong { background-color: #FF8080; }
