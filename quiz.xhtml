@@ -45,7 +45,8 @@
   $.ajaxSetup({
     beforeSend: function(req) { req.overrideMimeType("application/json"); },
   });
-  var q = new Quiz('test.quiz');
+  var args = parseArgs();
+  var q = new Quiz(args['t']);
   $('[rel^=localize]').localize('lang/quiz');
   q.showQuestion();
 </script>

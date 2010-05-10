@@ -1,3 +1,19 @@
+function parseArgs() {
+    var s = document.location.search;
+    var args = [];
+    var p = 0;
+    while (true) {
+        var np = s.indexOf('=', p);
+        if (np < 0) break;
+        var name = s.substring(p + 1, np);
+        p = s.indexOf(';', np);
+        if (p < 0) p = s.length;
+        var value = s.substring(np + 1, p);
+        args[name] = value;
+    }
+    return args;
+}
+
 var Question = $.inherit(
 {
     __constructor: function(src) {
