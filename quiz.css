@@ -1,5 +1,10 @@
 div.question {
     border: 1px solid black;
+    padding: 5px;
+}
+
+input.control {
+    margin: 3px;
 }
 
 .hidden {

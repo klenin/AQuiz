@@ -9,6 +9,9 @@
 </head>
 <body>
 
+<input type="button" class="control" id="prevQuestion" rel="localize[buttons.prev]" value="&lt;" onclick="q.prevQuestion()" />
+<input type="button" class="control" id="nextQuestion" rel="localize[buttons.next]" value="&gt;" onclick="q.nextQuestion()" />
+
 <div id="singleChoice" class="question hidden">
 <div class="questionText">Question text</div>
 <ul>
@@ -31,9 +34,6 @@
 <div class="questionText">Question text</div>
 <input type="text" value="" />
 </div>
-
-<input type="button" id="prevQuestion" rel="localize[buttons.prev]" value="&lt;" onclick="q.prevQuestion()" />
-<input type="button" id="nextQuestion" rel="localize[buttons.next]" value="&gt;" onclick="q.nextQuestion()" />
 
 <script type="text/javascript">
   // Avoid "not well-formed" error when loading JSON from local file.
