@@ -184,20 +184,25 @@ var Quiz = $.inherit(
 
     currentGotoButton: function() {
         var v = (this.currentQuestion + 1);
-        return $('#questionNumbers input.[value=' + v + ']')[0];
+        return $('#questionNumbers input.[value=' + v + ']');
     },
 
     leaveQuestion: function() {
         var q = this.questions[this.currentQuestion];
         q.ui().hide();
         q.rememberAnswer();
-        this.currentGotoButton().disabled = false;
+        var b = this.currentGotoButton();
+        if (q.answer)
+            b.addClass('answered');
+        else
+            b.removeClass('answered');
+        b[0].disabled = false;
     },
 
     showQuestion: function() {
         this.questions[this.currentQuestion].show();
         $('#nextQuestion')[0].disabled = !this.nextOk();
         $('#prevQuestion')[0].disabled = !this.prevOk();
-        this.currentGotoButton().disabled = true;
+        this.currentGotoButton()[0].disabled = true;
     },
 });
