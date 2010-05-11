@@ -153,7 +153,7 @@ var Quiz = $.inherit(
                     return new questionTypes[v.type](v);
                 });
                 that.updateGotoButtons();
-                that.showCheckAnswers();
+                that.showCheckSumbitAnswers();
                 $('#waiting').hide();
                 $('#controlButtons').show();
                 that.showQuestion();
@@ -175,7 +175,9 @@ var Quiz = $.inherit(
         });
     },
 
-    showCheckAnswers: function() {
+    showCheckSumbitAnswers: function() {
+        if (typeof(quiz_submit_url) == 'function')
+            $('#submitAnswersButton').show()[0].disabled = false;
         var show = false;
         for (var i = 0; i < this.questions.length && !show; ++i)
             show = this.questions[i].correct != null;
@@ -203,6 +205,18 @@ var Quiz = $.inherit(
             }
         }
         $('#checkAnswers').show();
+    },
+
+    submitAnswers: function() {
+        if (!confirm('Are you sure?')) return;
+        var answers = [];
+        $.each(this.questions, function(i, q) {
+            answers[i] = q.answer;
+        });
+        $.post(
+            quiz_submit_url(), { answers: JSON.stringify(answers) },
+            function() { alert('Results submitted'); }
+        );
     },
 
     gotoButton: function(btn) {
