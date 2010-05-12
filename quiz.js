@@ -208,15 +208,18 @@ var Quiz = $.inherit(
     },
 
     submitAnswers: function() {
-        if (!confirm('Are you sure?')) return;
-        var answers = [];
-        $.each(this.questions, function(i, q) {
-            answers[i] = q.answer;
-        });
-        $.post(
-            quiz_submit_url(), { answers: JSON.stringify(answers) },
-            function() { alert('Results submitted'); }
-        );
+        this.leaveQuestion();
+        if (confirm('Are you sure?')) {
+            var answers = [];
+            $.each(this.questions, function(i, q) {
+                answers[i] = q.answer;
+            });
+            $.post(
+                quiz_submit_url(), { answers: JSON.stringify(answers) },
+                function() { alert('Results submitted'); }
+            );
+        }
+        this.showQuestion();
     },
 
     gotoButton: function(btn) {
