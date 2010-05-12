@@ -3,6 +3,8 @@ div.question {
     padding: 5px;
 }
 
+div.question ul li { list-style: none; }
+
 div#controlButtons { margin: 3px; }
 
 div#controlButtons input { margin: 3px; }
