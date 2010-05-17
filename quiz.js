@@ -24,6 +24,7 @@ var Question = $.inherit(
 {
     __constructor: function(src) {
         this.text = src.text;
+        this.answer = null;
         this.correct = src.correct;
     },
 
@@ -33,7 +34,9 @@ var Question = $.inherit(
         var ui = this.ui();
         ui.children('.questionText').html(this.text);
         ui.show();
-    }
+    },
+
+    isCorrect: function () { return this.answer == this.correct; },
 });
 
 
@@ -86,32 +89,46 @@ var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
                 that.answer = this.id - 1;
         });
     },
+
+    answerToText: function (answer) { return answer + 1; },
 });
 
 var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
 {
     __constructor: function(src) {
         this.__base(src);
-        this.answer = [];
+        this.answer = null;
         if (src.variants)
-            for (var i = 0; i < src.variants.length; ++i) {
+            for (var i = 0; i < src.variants.length; ++i)
                 this.variants.push(src.variants[i]);
-                this.answer.push(false);
-            }
     },
 
     ui: function() { return $('#multiChoice'); },
 
     prepareVariant: function (index, elem) {
-        elem.children('input')[0].checked = this.answer[index];
+        if (this.answer != null)
+            elem.children('input')[0].checked = this.answer[index];
     },
 
     rememberAnswer: function() {
-        var that = this;
+        var answer = [];
+        var hasAnswer = false;
         $('#multiChoice input').each(function(i) {
-            if (this.id)
-                that.answer[this.id - 1] = this.checked;
+            if (this.id) {
+                answer[this.id - 1] = this.checked ? 1 : 0;
+                if (this.checked) hasAnswer = true;
+            }
         });
+        this.answer = hasAnswer ? answer : null;
+    },
+
+    answerToText: function (answer) { return answer.join(','); },
+
+    isCorrect: function () {
+        for(var i = 0; i < this.answer.length; ++i)
+            if (this.answer[i] != this.correct[i])
+                return false;
+        return true;
     },
 });
 
@@ -133,7 +150,11 @@ var DirectInputQuestion = $.inherit(Question,
 
     rememberAnswer: function() {
         this.answer = this.input().value;
+        if (!this.answer)   
+            this.answer = null;
     },
+
+    answerToText: function (answer) { return answer; },
 });
 
 var Quiz = $.inherit(
@@ -203,11 +224,11 @@ var Quiz = $.inherit(
             var td = r.children('td');
             $(td[0]).text(i + 1);
             var q = this.questions[i];
-            $(td[1]).text(q.answer == null ? '?' : q.answer + 1);
-            $(td[2]).text(q.correct == null ? '?' : q.correct + 1);
+            $(td[1]).text(q.answer == null ? '?' : q.answerToText(q.answer));
+            $(td[2]).text(q.correct == null ? '?' : q.answerToText(q.correct));
             r.removeClass('correct wrong');
             if (q.answer != null && q.correct != null) {
-                r.addClass(q.answer == q.correct ? 'correct' : 'wrong');
+                r.addClass(q.isCorrect() ? 'correct' : 'wrong');
             }
         }
         $('#checkAnswers').show();
