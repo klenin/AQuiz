@@ -22,15 +22,15 @@ function parseArgs() {
 
 var Question = $.inherit(
 {
-    __constructor: function(src) {
+    __constructor: function (src) {
         this.text = src.text;
         this.answer = null;
         this.correct = src.correct;
     },
 
-    ui: function() {},
+    ui: function () {},
 
-    show: function() {
+    show: function () {
         var ui = this.ui();
         ui.children('.questionText').html(this.text);
         ui.show();
@@ -42,20 +42,20 @@ var Question = $.inherit(
 
 var ChoiceQuestion = $.inherit(Question,
 {
-    __constructor: function(src) {
+    __constructor: function (src) {
         this.__base(src);
         this.variants = [];
     },
 
-    prepareVariant: function(index, elem) {},
+    prepareVariant: function (index, elem) {},
     
-    show: function() {
+    show: function () {
         this.__base();
         var variants = this.ui().children('ul');
         var variantTemplate = variants.children('.variantTemplate');
         variants.children().not('.variantTemplate').remove();
         var that = this;
-        $.each(this.variants, function(i, text) {
+        $.each(this.variants, function (i, text) {
             var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
             elem.children('input').attr('id', i + 1);
             elem.children('label').html(text).attr('for', i + 1);
@@ -67,7 +67,7 @@ var ChoiceQuestion = $.inherit(Question,
 
 var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
 {
-    __constructor: function(src) {
+    __constructor: function (src) {
         this.__base(src);
         if (src.variants)
             for (var i = 0; i < src.variants.length; ++i)
@@ -75,16 +75,16 @@ var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
         this.answer = null;
     },
     
-    ui: function() { return $('#singleChoice'); },
+    ui: function () { return $('#singleChoice'); },
 
-    prepareVariant: function(index, elem) {
+    prepareVariant: function (index, elem) {
         elem.children('input')[0].checked = this.answer == index;
     },
 
-    rememberAnswer: function() {
+    rememberAnswer: function () {
         var that = this;
         this.answer = null;
-        $('#singleChoice input').each(function(i) {
+        $('#singleChoice input').each(function (i) {
             if (this.checked)
                 that.answer = this.id - 1;
         });
@@ -95,7 +95,7 @@ var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
 
 var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
 {
-    __constructor: function(src) {
+    __constructor: function (src) {
         this.__base(src);
         this.answer = null;
         if (src.variants)
@@ -103,17 +103,17 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
                 this.variants.push(src.variants[i]);
     },
 
-    ui: function() { return $('#multiChoice'); },
+    ui: function () { return $('#multiChoice'); },
 
     prepareVariant: function (index, elem) {
         if (this.answer != null)
             elem.children('input')[0].checked = this.answer[index];
     },
 
-    rememberAnswer: function() {
+    rememberAnswer: function () {
         var answer = [];
         var hasAnswer = false;
-        $('#multiChoice input').each(function(i) {
+        $('#multiChoice input').each(function (i) {
             if (this.id) {
                 answer[this.id - 1] = this.checked ? 1 : 0;
                 if (this.checked) hasAnswer = true;
@@ -134,21 +134,21 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
 
 var DirectInputQuestion = $.inherit(Question,
 {
-    __constructor: function(src) {
+    __constructor: function (src) {
         this.__base(src);
         this.answer = null;
     },
     
-    ui: function() { return $('#directInput'); },
+    ui: function () { return $('#directInput'); },
 
-    input: function() { return this.ui().children('input')[0]; },
+    input: function () { return this.ui().children('input')[0]; },
 
-    show: function() {
+    show: function () {
         this.__base();
         this.input().value = this.answer;
     },
 
-    rememberAnswer: function() {
+    rememberAnswer: function () {
         this.answer = this.input().value;
         if (!this.answer)   
             this.answer = null;
@@ -159,7 +159,7 @@ var DirectInputQuestion = $.inherit(Question,
 
 var Quiz = $.inherit(
 {
-    __constructor: function(quizUrl) {
+    __constructor: function (quizUrl) {
         this.currentQuestion = 0;
         this.questions = [];
     },
@@ -175,8 +175,8 @@ var Quiz = $.inherit(
             url: quizUrl,
             dataType: 'json',
             timeout: 10000,
-            success: function(quizJSON) {
-                that.questions = $.map(quizJSON, function(v, i) {
+            success: function (quizJSON) {
+                that.questions = $.map(quizJSON, function (v, i) {
                     return new questionTypes[v.type](v);
                 });
                 that.updateGotoButtons();
@@ -185,24 +185,24 @@ var Quiz = $.inherit(
                 $('#controlButtons').show();
                 that.showQuestion();
             },
-            error: function(req, textStatus, err) {
+            error: function (req, textStatus, err) {
                 req.abort();
                 setTimeout(
-                    function(q, url) { q.load(url); }, 4000, that, quizUrl);
+                    function (q, url) { q.load(url); }, 4000, that, quizUrl);
             },
         };
         $.ajax(settings);
     },
 
-    updateGotoButtons: function() {
+    updateGotoButtons: function () {
         var s = $('#questionNumbers');
         var btnTemplate = s.children('input');
-        $.each(this.questions, function(i) {
+        $.each(this.questions, function (i) {
             s.append(btnTemplate.clone().val(i + 1).show());
         });
     },
 
-    showCheckSumbitAnswers: function() {
+    showCheckSumbitAnswers: function () {
         if (typeof(quiz_submit_url) == 'function')
             $('#submitAnswersButton').show()[0].disabled = false;
         var show = false;
@@ -216,7 +216,7 @@ var Quiz = $.inherit(
             t.append(rowTemplate.clone().show());
     },
 
-    checkAnswers: function() {
+    checkAnswers: function () {
         this.leaveQuestion();
         var rows = $('#checkAnswers table tr');
         for (var i = 0; i < this.questions.length; ++i) {
@@ -234,55 +234,55 @@ var Quiz = $.inherit(
         $('#checkAnswers').show();
     },
 
-    submitAnswers: function() {
+    submitAnswers: function () {
         this.leaveQuestion();
         if (confirm('Are you sure?')) {
             var answers = [];
-            $.each(this.questions, function(i, q) {
+            $.each(this.questions, function (i, q) {
                 answers[i] = q.answer;
             });
             $.post(
                 quiz_submit_url(), { answers: JSON.stringify(answers) },
-                function() { alert('Results submitted'); }
+                function () { alert('Results submitted'); }
             );
         }
         this.showQuestion();
     },
 
-    gotoButton: function(btn) {
+    gotoButton: function (btn) {
         this.leaveQuestion();
         this.currentQuestion = $(btn).val() - 1;
         this.showQuestion();
     },
 
-    nextOk: function() {
+    nextOk: function () {
         return this.currentQuestion < this.questions.length - 1;
     },
 
-    prevOk: function() {
+    prevOk: function () {
         return this.currentQuestion > 0;
     },
 
-    nextQuestion: function() {
+    nextQuestion: function () {
         if (!this.nextOk()) return;
         this.leaveQuestion();
         ++this.currentQuestion;
         this.showQuestion();
     },
 
-    prevQuestion: function() {
+    prevQuestion: function () {
         if (!this.prevOk()) return;
         this.leaveQuestion();
         --this.currentQuestion;
         this.showQuestion();
     },
 
-    currentGotoButton: function() {
+    currentGotoButton: function () {
         var v = (this.currentQuestion + 1);
         return $('#questionNumbers input.[value=' + v + ']');
     },
 
-    leaveQuestion: function() {
+    leaveQuestion: function () {
         var q = this.questions[this.currentQuestion];
         q.ui().hide();
         q.rememberAnswer();
@@ -296,7 +296,7 @@ var Quiz = $.inherit(
         b[0].disabled = false;
     },
 
-    showQuestion: function() {
+    showQuestion: function () {
         $('#checkAnswers').hide();
         this.questions[this.currentQuestion].show();
         $('#nextQuestion')[0].disabled = !this.nextOk();
