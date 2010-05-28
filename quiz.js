@@ -4,9 +4,11 @@
     http://github.com/klenin/AQuiz
 */
 
+"use strict";
+
 function parseArgs() {
     var s = document.location.search;
-    var args = {}
+    var args = {};
     var p = 0;
     while (true) {
         var np = s.indexOf('=', p);
@@ -106,7 +108,7 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
     ui: function () { return $('#multiChoice'); },
 
     prepareVariant: function (index, elem) {
-        if (this.answer != null)
+        if (this.answer !== null)
             elem.children('input')[0].checked = this.answer[index];
     },
 
@@ -125,7 +127,7 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
     answerToText: function (answer) { return answer.join(','); },
 
     isCorrect: function () {
-        for(var i = 0; i < this.answer.length; ++i)
+        for (var i = 0; i < this.answer.length; ++i)
             if (this.answer[i] != this.correct[i])
                 return false;
         return true;
@@ -207,7 +209,7 @@ var Quiz = $.inherit(
             $('#submitAnswersButton').show()[0].disabled = false;
         var show = false;
         for (var i = 0; i < this.questions.length && !show; ++i)
-            show = this.questions[i].correct != null;
+            show = this.questions[i].correct !== null;
         if (!show) return;
         $('#checkAnswersButton').show()[0].disabled = false;
         var t = $('#checkAnswers table');
@@ -224,10 +226,10 @@ var Quiz = $.inherit(
             var td = r.children('td');
             $(td[0]).text(i + 1);
             var q = this.questions[i];
-            $(td[1]).text(q.answer == null ? '?' : q.answerToText(q.answer));
-            $(td[2]).text(q.correct == null ? '?' : q.answerToText(q.correct));
+            $(td[1]).text(q.answer === null ? '?' : q.answerToText(q.answer));
+            $(td[2]).text(q.correct === null ? '?' : q.answerToText(q.correct));
             r.removeClass('correct wrong');
-            if (q.answer != null && q.correct != null) {
+            if (q.answer !== null && q.correct !== null) {
                 r.addClass(q.isCorrect() ? 'correct' : 'wrong');
             }
         }
@@ -289,7 +291,7 @@ var Quiz = $.inherit(
         $('#nextQuestion')[0].disabled = true;
         $('#prevQuestion')[0].disabled = true;
         var b = this.currentGotoButton();
-        if (q.answer != null)
+        if (q.answer !== null)
             b.addClass('answered');
         else
             b.removeClass('answered');
