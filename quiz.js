@@ -6,7 +6,7 @@
 
 function parseArgs() {
     var s = document.location.search;
-    var args = [];
+    var args = {}
     var p = 0;
     while (true) {
         var np = s.indexOf('=', p);
