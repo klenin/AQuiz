@@ -1,6 +1,8 @@
 [
     { "type": "sc", "text": "question 1", "variants": [1, 2, 3], "correct": 2 },
+    { "type": "sc", "text": "question 1a", "variants": [1, 2, 3], "answer": 1, "correct": 2 },
     { "type": "sc", "text": "question 2", "variants": [4, 5] },
     { "type": "mc", "text": "question 3", "variants": ["abcd", "evgh", "fsfas"], "correct": [1, 0, 1] },
     { "type": "di", "text": "Enter string" },
+    { "type": "di", "text": "Enter string 2", "answer": "a string" },
 ]

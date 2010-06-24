@@ -26,7 +26,7 @@ var Question = $.inherit(
 {
     __constructor: function (src) {
         this.text = src.text;
-        this.answer = null;
+        this.answer = src.answer || null;
         this.correct = src.correct;
     },
 
@@ -74,7 +74,6 @@ var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
         if (src.variants)
             for (var i = 0; i < src.variants.length; ++i)
                 this.variants.push(src.variants[i]);
-        this.answer = null;
     },
     
     ui: function () { return $('#singleChoice'); },
@@ -99,7 +98,6 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
 {
     __constructor: function (src) {
         this.__base(src);
-        this.answer = null;
         if (src.variants)
             for (var i = 0; i < src.variants.length; ++i)
                 this.variants.push(src.variants[i]);
@@ -138,7 +136,6 @@ var DirectInputQuestion = $.inherit(Question,
 {
     __constructor: function (src) {
         this.__base(src);
-        this.answer = null;
     },
     
     ui: function () { return $('#directInput'); },
@@ -196,11 +193,21 @@ var Quiz = $.inherit(
         $.ajax(settings);
     },
 
+    updateAnswered: function (button, question) {
+        if (question.answer !== null)
+            button.addClass('answered');
+        else
+            button.removeClass('answered');
+    },
+
     updateGotoButtons: function () {
+        var that = this;
         var s = $('#questionNumbers');
         var btnTemplate = s.children('input');
-        $.each(this.questions, function (i) {
-            s.append(btnTemplate.clone().val(i + 1).show());
+        $.each(this.questions, function (i, q) {
+            var b = btnTemplate.clone().val(i + 1);
+            that.updateAnswered(b, q);
+            s.append(b.show());
         });
     },
 
@@ -291,10 +298,7 @@ var Quiz = $.inherit(
         $('#nextQuestion')[0].disabled = true;
         $('#prevQuestion')[0].disabled = true;
         var b = this.currentGotoButton();
-        if (q.answer !== null)
-            b.addClass('answered');
-        else
-            b.removeClass('answered');
+        this.updateAnswered(b, q);
         b[0].disabled = false;
     },
 
