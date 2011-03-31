@@ -216,7 +216,7 @@ var Quiz = $.inherit(
             $('#submitAnswersButton').show()[0].disabled = false;
         var show = false;
         for (var i = 0; i < this.questions.length && !show; ++i)
-            show = this.questions[i].correct !== null;
+            show = this.questions[i].correct !== undefined;
         if (!show) return;
         $('#checkAnswersButton').show()[0].disabled = false;
         var t = $('#checkAnswers table');
