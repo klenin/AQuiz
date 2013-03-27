@@ -1,5 +1,6 @@
 /*
     Copyright © 2010 Alexander S. Klenin
+    Copyright © 2013 Natalia D. Zemlyannikova
     Licensed under GPL version 2 or later.
     http://github.com/klenin/AQuiz
 */
@@ -156,6 +157,128 @@ var DirectInputQuestion = $.inherit(Question,
     answerToText: function (answer) { return answer; },
 });
 
+var SortableQuestion = $.inherit(Question,
+{
+    __constructor: function (src) {
+        this.__base(src);
+        this.variants = [];
+        if (src.variants)
+            for (var i = 0; i < src.variants.length; ++i)
+                this.variants.push(src.variants[i]);
+    },
+
+    ui: function () { return $('#sortable'); },
+
+    show: function () {
+        this.__base();
+        var answer = this.answer;
+        if (answer === null) {
+            answer = [];
+            for (var i = 0; i < this.variants.length; ++i)
+                answer.push(i);
+        }
+        var variants = this.ui().children('ul');
+        var variantTemplate = variants.children('.variantTemplate');
+        variants.children().not('.variantTemplate').remove();
+        var that = this;
+        $.each(answer, function (key, i) {
+            var text = that.variants[i];
+            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
+            elem.attr('id', i);
+            elem.children('label').html(text);
+            variants.append(elem);
+        });
+        variants.sortable();
+    },
+
+    rememberAnswer: function () {
+        var answer = [];
+        this.ui().children('ul').children('li').each(function (i) {
+            if (this.id)
+                answer.push(this.id);
+        });
+        this.answer = answer;
+    },
+
+    answerToText: function (answer) { return answer.join(','); },
+
+    isCorrect: function () {
+        for (var i = 0; i < this.answer.length; ++i)
+            if (this.answer[i] != this.correct[i])
+                return false;
+        return true;
+    },
+});
+
+var MatchQuestion = $.inherit(Question,
+{
+    __constructor: function (src) {
+        this.__base(src);
+        this.lvariants = [];
+        this.rvariants = [];
+        if (src.variants)
+            for (var i = 0; i < src.variants[0].length; ++i) {
+                this.lvariants.push(src.variants[0][i]);
+                this.rvariants.push(src.variants[1][i]);
+            }
+    },
+
+    ui: function () { return $('#match'); },
+
+    st: function () { return $('#match #static'); },
+
+    so: function () { return $('#match #sortable'); },
+
+    show: function () {
+        this.__base();
+        var answer = this.answer;
+        if (answer === null) {
+            answer = [];
+            for (var i = 0; i < this.lvariants.length; ++i)
+                answer.push(i);
+        }
+        var lvariants = this.st().children('ul');
+        var variantTemplate = lvariants.children('.variantTemplate');
+        lvariants.children().not('.variantTemplate').remove();
+        var that = this;
+        $.each(this.lvariants, function (i, text) {
+            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
+            elem.children('label').html(text);
+            lvariants.append(elem);
+        });
+        var rvariants = this.so().children('ul');
+        variantTemplate = rvariants.children('.variantTemplate');
+        rvariants.children().not('.variantTemplate').remove();
+        var that = this;
+        $.each(answer, function (key, i) {
+            var text = that.rvariants[i];
+            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
+            elem.attr('id', i);
+            elem.children('label').html(text);
+            rvariants.append(elem);
+        });
+        rvariants.sortable();
+    },
+
+    rememberAnswer: function () {
+        var answer = [];
+        this.so().children('ul').children('li').each(function (i) {
+            if (this.id)
+                answer.push(this.id);
+        });
+        this.answer = answer;
+    },
+
+    answerToText: function (answer) { return answer.join(','); },
+
+    isCorrect: function () {
+        for (var i = 0; i < this.answer.length; ++i)
+            if (this.answer[i] != this.correct[i])
+                return false;
+        return true;
+    },
+});
+
 var Quiz = $.inherit(
 {
     __constructor: function (quizUrl) {
@@ -169,6 +292,8 @@ var Quiz = $.inherit(
             sc: SingleChoiceQuestion,
             mc: MultiChoiceQuestion,
             di: DirectInputQuestion,
+            sr: SortableQuestion,
+            mt: MatchQuestion,
         };
         var settings = {
             url: quizUrl,

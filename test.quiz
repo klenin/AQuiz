@@ -5,4 +5,6 @@
     { "type": "mc", "text": "question 3", "variants": ["abcd", "evgh", "fsfas"], "correct": [1, 0, 1] },
     { "type": "di", "text": "Enter string" },
     { "type": "di", "text": "Enter string 2", "answer": "a string" },
+    { "type": "sr", "text": "question 4", "variants": [3, 2, 1], "correct": [2, 1, 0] },
+    { "type": "mt", "text": "question 5", "variants": [[1, 2, 3], [3, 2, 1]], "correct": [2, 1, 0] }
 ]

@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="quiz.css" />
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script src="jquery-ui-1.8.12.custom.min.js"></script> 
 <script type="text/javascript" src="jquery.inherit-1.1.1.js"></script>
 <script type="text/javascript" src="jquery.localize.js"></script>
 <script type="text/javascript" src="json2.min.js"></script>
@@ -44,6 +45,35 @@
 <div id="directInput" class="question hidden">
 <div class="questionText">Question text</div>
 <input type="text" value="" />
+</div>
+
+<div id="sortable" class="question hidden">
+<div class="questionText">Question text</div>
+<ul>
+  <li class="variantTemplate hidden">
+    <label>answer text</label>
+  </li>
+</ul>
+</div>
+
+<div id="match" class="question hidden">
+<div class="questionText">Question text</div>
+<table><tr>
+<th id="static">
+<ul>
+  <li class="variantTemplate hidden">
+    <label>answer text</label>
+  </li>
+</ul>
+</th>
+<th id="sortable">
+<ul>
+  <li class="variantTemplate hidden">
+    <label>answer text</label>
+  </li>
+</ul>
+</th>
+</tr></table>
 </div>
 
 <div id="checkAnswers" class="hidden">
