@@ -5,6 +5,11 @@ div.question {
 
 div.question ul li { list-style: none; }
 
+#sortable ul { width: 350px; }
+#sortable ul li { margin: 0 3px 3px 3px; padding: 0.4em; background-color: #D6D6D6; border: 1px solid black; }
+#match #sortable ul { padding: 0; }
+#match #static ul li { margin: 0 3px 3px 3px; padding: 0.4em; }
+
 div#controlButtons { margin: 3px; }
 
 div#controlButtons input { margin: 3px; }
