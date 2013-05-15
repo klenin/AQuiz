@@ -10,6 +10,8 @@ div.question ul li { list-style: none; }
 #match #sortable ul { padding: 0; }
 #match #static ul li { margin: 0 3px 3px 3px; padding: 0.4em; }
 
+div#code { margin: 3px 0 3px 20px }
+
 div#controlButtons { margin: 3px; }
 
 div#controlButtons input { margin: 3px; }
