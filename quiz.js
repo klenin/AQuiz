@@ -1,5 +1,5 @@
 /*
-    Copyright © 2010 Alexander S. Klenin
+    Copyright © 2010-2013 Alexander S. Klenin
     Copyright © 2013 Natalia D. Zemlyannikova
     Licensed under GPL version 2 or later.
     http://github.com/klenin/AQuiz
@@ -413,7 +413,7 @@ var Quiz = $.inherit(
 
     currentGotoButton: function () {
         var v = (this.currentQuestion + 1);
-        return $('#questionNumbers input.[value=' + v + ']');
+        return $('#questionNumbers input[value=' + v + ']');
     },
 
     leaveQuestion: function () {
