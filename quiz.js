@@ -193,7 +193,10 @@ var SortableQuestion = $.inherit(Question,
         });
     },
 
-    answerToText: function (answer) { return answer.join(','); },
+    answerToText: function (answer) {
+        var that = this;
+        return $.map(answer, function (elem) { return that.variants[elem]}).join(',');
+    },
 
     isCorrect: function () {
         for (var i = 0; i < this.answer.length; ++i)
@@ -255,7 +258,10 @@ var MatchQuestion = $.inherit(Question,
         });
     },
 
-    answerToText: function (answer) { return answer.join(','); },
+    answerToText: function (answer) {
+        var that = this;
+        return $.map(answer, function (elem) { return that.rvariants[elem]}).join(',');
+    },
 
     isCorrect: function () {
         for (var i = 0; i < this.answer.length; ++i)
