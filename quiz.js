@@ -181,23 +181,16 @@ var SortableQuestion = $.inherit(Question,
         var variantTemplate = variants.children('.variantTemplate');
         variants.children().not('.variantTemplate').remove();
         var that = this;
-        $.each(answer, function (key, i) {
-            var text = that.variants[i];
-            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
-            elem.attr('id', i);
-            elem.children('label').html(text);
-            variants.append(elem);
-        });
-        variants.sortable();
+        variants.append($.map(answer, function (elem) {
+            return variantTemplate.clone().removeClass('hidden variantTemplate').
+                attr('id', elem).html(that.variants[elem]);
+        })).sortable();
     },
 
     rememberAnswer: function () {
-        var answer = [];
-        this.ui().children('ul').children('li').each(function (i) {
-            if (this.id)
-                answer.push(this.id);
+        this.answer = $.map(this.ui().children('ul').children('li'), function (elem) {
+            return elem.id ? elem.id : null;
         });
-        this.answer = answer;
     },
 
     answerToText: function (answer) { return answer.join(','); },
@@ -242,31 +235,24 @@ var MatchQuestion = $.inherit(Question,
         lvariants.children().not('.variantTemplate').remove();
         var that = this;
         $.each(this.lvariants, function (i, text) {
-            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
-            elem.children('label').html(text);
-            lvariants.append(elem);
+            variantTemplate.clone().removeClass('hidden variantTemplate').
+                html(text).appendTo(lvariants);
         });
         var rvariants = this.so().children('ul');
         variantTemplate = rvariants.children('.variantTemplate');
         rvariants.children().not('.variantTemplate').remove();
         var that = this;
-        $.each(answer, function (key, i) {
-            var text = that.rvariants[i];
-            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
-            elem.attr('id', i);
-            elem.children('label').html(text);
-            rvariants.append(elem);
+        $.each(answer, function (i, elem) {
+            variantTemplate.clone().removeClass('hidden variantTemplate').
+              attr('id', elem).html(that.rvariants[elem]).appendTo(rvariants);
         });
         rvariants.sortable();
     },
 
     rememberAnswer: function () {
-        var answer = [];
-        this.so().children('ul').children('li').each(function (i) {
-            if (this.id)
-                answer.push(this.id);
+        this.answer = $.map(this.so().children('ul').children('li'), function (elem) {
+            return elem.id ? elem.id : null;
         });
-        this.answer = answer;
     },
 
     answerToText: function (answer) { return answer.join(','); },
