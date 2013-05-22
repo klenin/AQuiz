@@ -33,6 +33,17 @@ var Question = $.inherit(
 
     ui: function () {},
 
+    makeVariants: function (variantUI, variants, makeVariant) {
+        var variantTemplate = variantUI.children('.variantTemplate');
+        variantUI.children().not('.variantTemplate').remove();
+        $.each(variants, function (i, text) {
+            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
+            makeVariant(elem, i, text);
+            variantUI.append(elem);
+        });
+        return variantUI;
+    },
+
     show: function () {
         var ui = this.ui();
         ui.children('.questionText').html(this.text);
@@ -51,20 +62,16 @@ var ChoiceQuestion = $.inherit(Question,
     },
 
     prepareVariant: function (index, elem) {},
-    
+
     show: function () {
         this.__base();
-        var variants = this.ui().children('ul');
-        var variantTemplate = variants.children('.variantTemplate');
-        variants.children().not('.variantTemplate').remove();
         var that = this;
-        $.each(this.variants, function (i, text) {
-            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
-            elem.children('input').attr('id', i + 1);
-            elem.children('label').html(text).attr('for', i + 1);
-            that.prepareVariant(i, elem);
-            variants.append(elem);
-        });
+        this.makeVariants(this.ui().children('ul'), this.variants,
+            function (elem, i, text) {
+                elem.children('input').attr('id', i + 1);
+                elem.children('label').html(text).attr('for', i + 1);
+                that.prepareVariant(i, elem);
+            });
     },
 });
 
@@ -177,14 +184,10 @@ var SortableQuestion = $.inherit(Question,
             for (var i = 0; i < this.variants.length; ++i)
                 answer.push(i);
         }
-        var variants = this.ui().children('ul');
-        var variantTemplate = variants.children('.variantTemplate');
-        variants.children().not('.variantTemplate').remove();
         var that = this;
-        variants.append($.map(answer, function (elem) {
-            return variantTemplate.clone().removeClass('hidden variantTemplate').
-                attr('id', elem).html(that.variants[elem]);
-        })).sortable();
+        this.makeVariants(this.ui().children('ul'), answer, function (elem, i, text) {
+            elem.attr('id', text).html(that.variants[text]);
+        }).sortable();
     },
 
     rememberAnswer: function () {
@@ -233,23 +236,14 @@ var MatchQuestion = $.inherit(Question,
             for (var i = 0; i < this.lvariants.length; ++i)
                 answer.push(i);
         }
-        var lvariants = this.st().children('ul');
-        var variantTemplate = lvariants.children('.variantTemplate');
-        lvariants.children().not('.variantTemplate').remove();
-        var that = this;
-        $.each(this.lvariants, function (i, text) {
-            variantTemplate.clone().removeClass('hidden variantTemplate').
-                html(text).appendTo(lvariants);
+        this.makeVariants(this.st().children('ul'), this.lvariants, function (elem, i, text) {
+            elem.html(text);
         });
-        var rvariants = this.so().children('ul');
-        variantTemplate = rvariants.children('.variantTemplate');
-        rvariants.children().not('.variantTemplate').remove();
+
         var that = this;
-        $.each(answer, function (i, elem) {
-            variantTemplate.clone().removeClass('hidden variantTemplate').
-              attr('id', elem).html(that.rvariants[elem]).appendTo(rvariants);
-        });
-        rvariants.sortable();
+        this.makeVariants(this.so().children('ul'), answer, function (elem, i, text) {
+            elem.attr('id', text).html(that.rvariants[text]);
+        }).sortable();
     },
 
     rememberAnswer: function () {
