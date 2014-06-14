@@ -27,7 +27,7 @@ var Question = $.inherit(
 {
     __constructor: function (src) {
         this.text = src.text;
-        this.answer = src.answer || null;
+        this.answer = src.answer === undefined ? null : src.answer;
         this.correct = src.correct;
     },
 
