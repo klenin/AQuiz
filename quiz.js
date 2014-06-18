@@ -9,8 +9,9 @@
 
 function parseArgs() {
     var args = {};
-    $.each(decodeURIComponent(document.location.search.substring(1)).split(/[&;]/), function (i, s) {
+    $.each(document.location.search.substring(1).split(/[&;]/), function (i, s) {
         if (s === '') return;
+        s = decodeURIComponent(s);
         var np = s.indexOf('=', s);
         if (np < 0)
             args[s] = null;
