@@ -83,8 +83,7 @@
     beforeSend: function(req) { req.overrideMimeType('application/json'); },
   });
   $('[rel^=localize]').localize('lang/quiz');
-  var q = new Quiz();
-  quiz_init(q);
+  quiz_init(new Quiz());
 </script>
 
 </body>

@@ -1,4 +1,4 @@
-function quiz_init() {
+function quiz_init(q) {
     var args = parseArgs();
     q.load(unescape(args.url));
 }
