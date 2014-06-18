@@ -8,18 +8,15 @@
 "use strict";
 
 function parseArgs() {
-    var s = document.location.search;
     var args = {};
-    var p = 0;
-    while (true) {
-        var np = s.indexOf('=', p);
-        if (np < 0) break;
-        var name = s.substring(p + 1, np);
-        p = s.indexOf(';', np);
-        if (p < 0) p = s.length;
-        var value = s.substring(np + 1, p);
-        args[name] = value;
-    }
+    $.each(decodeURIComponent(document.location.search.substring(1)).split(/[&;]/), function (i, s) {
+        if (s === '') return;
+        var np = s.indexOf('=', s);
+        if (np < 0)
+            args[s] = null;
+        else
+            args[s.substring(0, np)] = s.substring(np + 1);
+    });
     return args;
 }
 
