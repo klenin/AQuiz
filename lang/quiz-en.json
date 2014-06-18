@@ -1,6 +1,12 @@
 {
     "buttons": {
-        "next": "Next question",
-        "prev": "Prev question",
+        "next": "Next question >",
+        "prev": "< Prev question",
+        "check": "Check",
+        "submit": "Submit"
+    },
+    "messages": {
+        "confirmSubmit": "Finish testing and submit answers?",
+        "submitSuccess": "Answers submitted"
     }
 }

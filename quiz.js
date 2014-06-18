@@ -360,14 +360,14 @@ var Quiz = $.inherit(
 
     submitAnswers: function () {
         this.leaveQuestion();
-        if (confirm('Are you sure?')) {
+        if (confirm($('#confirmSubmit').text())) {
             var answers = [];
             $.each(this.questions, function (i, q) {
                 answers[i] = q.answer;
             });
             $.post(
                 quiz_submit_url(), { answers: JSON.stringify(answers) },
-                function () { alert('Results submitted'); }
+                function () { alert($('#submitSuccess').text()); }
             );
         }
         this.showQuestion();
