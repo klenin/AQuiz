@@ -283,12 +283,12 @@ var Quiz = $.inherit(
             dataType: 'json',
             timeout: 10000,
             success: function (quizJSON) {
+                $('#waiting').hide();
                 that.questions = $.map(quizJSON, function (v, i) {
                     return new questionTypes[v.type](v);
                 });
                 that.updateGotoButtons();
                 that.showCheckSumbitAnswers();
-                $('#waiting').hide();
                 $('#controlButtons').show();
                 that.showQuestion();
             },
