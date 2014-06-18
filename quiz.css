@@ -17,7 +17,7 @@ div#controlButtons { margin: 3px; }
 div#controlButtons input { margin: 3px; }
 
 span#questionNumbers { margin: 0; padding: 0; }
-span#questionNumbers input { width: 2em; }
+span#questionNumbers input { width: 2em; padding: 0; margin: 0; }
 span#questionNumbers input.answered { background-color: yellow; }
 span#questionNumbers input:disabled {
     color: blue;
