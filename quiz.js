@@ -269,8 +269,7 @@ var Quiz = $.inherit(
         this.questions = [];
     },
 
-    load: function (quizUrl) {
-        var that = this;
+    setQuestionsJSON: function (quizJSON) {
         var questionTypes = {
             sc: SingleChoiceQuestion,
             mc: MultiChoiceQuestion,
@@ -278,27 +277,29 @@ var Quiz = $.inherit(
             sr: SortableQuestion,
             mt: MatchQuestion,
         };
-        var settings = {
+        $('#waiting').hide();
+        this.currentQuestion = 0;
+        this.questions = $.map(quizJSON, function (v, i) {
+            return new questionTypes[v.type](v);
+        });
+        this.updateGotoButtons();
+        this.showCheckSumbitAnswers();
+        $('#controlButtons').show();
+        this.showQuestion();
+    },
+
+    load: function (quizUrl) {
+        var that = this;
+        $.ajax({
             url: quizUrl,
             dataType: 'json',
             timeout: 10000,
-            success: function (quizJSON) {
-                $('#waiting').hide();
-                that.questions = $.map(quizJSON, function (v, i) {
-                    return new questionTypes[v.type](v);
-                });
-                that.updateGotoButtons();
-                that.showCheckSumbitAnswers();
-                $('#controlButtons').show();
-                that.showQuestion();
-            },
+            success: function (quizJSON) { that.setQuestionsJSON(quizJSON); },
             error: function (req, textStatus, err) {
                 req.abort();
-                setTimeout(
-                    function (q, url) { q.load(url); }, 4000, that, quizUrl);
+                setTimeout(function (q, url) { q.load(url); }, 4000, that, quizUrl);
             },
-        };
-        $.ajax(settings);
+        });
     },
 
     updateAnswered: function (button, question) {
