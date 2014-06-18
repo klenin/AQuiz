@@ -15,13 +15,13 @@
 <div id="waiting"><img src="waiting.gif"/></div>
 
 <div id="controlButtons" class="hidden">
-<input type="button" id="prevQuestion" rel="localize[buttons.prev]" value="&lt;" onclick="q.prevQuestion()" />
-<input type="button" id="nextQuestion" rel="localize[buttons.next]" value="&gt;" onclick="q.nextQuestion()" />
+<input type="button" id="prevQuestionButton" rel="localize[buttons.prev]" value="&lt;" />
+<input type="button" id="nextQuestionButton" rel="localize[buttons.next]" value="&gt;" />
 <span id="questionNumbers">
-  <input type="button" class="hidden" onclick="q.gotoButton(this)" />
+  <input type="button" class="hidden" />
 </span>
-<input type="button" id="checkAnswersButton" class="hidden" value="Check" onclick="q.checkAnswers()" />
-<input type="button" id="submitAnswersButton" class="hidden" value="Submit" onclick="q.submitAnswers()" />
+<input type="button" id="checkAnswersButton" class="hidden" value="Check" />
+<input type="button" id="submitAnswersButton" class="hidden" value="Submit" />
 </div>
 
 <div id="singleChoice" class="question hidden">

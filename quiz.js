@@ -284,6 +284,10 @@ var Quiz = $.inherit(
         });
         this.updateGotoButtons();
         this.showCheckSumbitAnswers();
+        var that = this;
+        $(['prevQuestion', 'nextQuestion', 'checkAnswers', 'submitAnswers']).each(
+            function(i, name) { $('#' + name + 'Button').click(function() { that[name]() }); }
+        );
         $('#controlButtons').show();
         this.showQuestion();
     },
@@ -315,8 +319,9 @@ var Quiz = $.inherit(
         var btnTemplate = s.children('input');
         $.each(this.questions, function (i, q) {
             var b = btnTemplate.clone().val(i + 1);
+            b.click(function () { that.gotoButton(this); });
             that.updateAnswered(b, q);
-            s.append(b.show());
+            b.show().appendTo(s);
         });
     },
 
@@ -404,8 +409,8 @@ var Quiz = $.inherit(
         var q = this.questions[this.currentQuestion];
         q.ui().hide();
         q.rememberAnswer();
-        $('#nextQuestion')[0].disabled = true;
-        $('#prevQuestion')[0].disabled = true;
+        $('#nextQuestionButton')[0].disabled = true;
+        $('#prevQuestionButton')[0].disabled = true;
         var b = this.currentGotoButton();
         this.updateAnswered(b, q);
         b[0].disabled = false;
@@ -414,8 +419,8 @@ var Quiz = $.inherit(
     showQuestion: function () {
         $('#checkAnswers').hide();
         this.questions[this.currentQuestion].show();
-        $('#nextQuestion')[0].disabled = !this.nextOk();
-        $('#prevQuestion')[0].disabled = !this.prevOk();
+        $('#nextQuestionButton')[0].disabled = !this.nextOk();
+        $('#prevQuestionButton')[0].disabled = !this.prevOk();
         this.currentGotoButton()[0].disabled = true;
     },
 });
