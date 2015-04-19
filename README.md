@@ -45,7 +45,7 @@ answer to a quiz question or `null` if the question was not answered.
 ## Quiz format
 A quiz is a JSON file containing an array of questions.
 Each question is an object with the following keys:
-* `"type"`: question type, must be one of `"sc"`, `"mc"`, `"di"`, `"sr"`, `"mt"`;
+* `"type"`: question type, must be one of `"sc"`, `"mc"`, `"di"`, `"sr"`, `"mt"`, `"cn"`;
 * `"text"`: question text;
 * `"variants"`: answer options/choices;
 * `"answer"`: *optional* answer given by student;

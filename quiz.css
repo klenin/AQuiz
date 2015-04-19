@@ -5,10 +5,15 @@ div.question {
 
 div.question ul li { list-style: none; }
 
-#sortable ul { width: 350px; }
-#sortable ul li { margin: 0 3px 3px 3px; padding: 0.4em; background-color: #D6D6D6; border: 1px solid black; }
-#match #sortable ul { padding: 0; }
-#match #static ul li { margin: 0 3px 3px 3px; padding: 0.4em; }
+div.sortable { overflow: hidden; }
+div.sortable ul { margin: 6px; padding: 6px; float: left; }
+div.sortable ul li { margin: 6px; padding: 0.4em; }
+
+ul.sortableList { width: 350px; min-height: 45px; background-color: #E7E7E7; }
+ul.sortableList li { width: 325px; background-color: #D6D6D6; border: 1px solid black; }
+ul.sortableList li.removable { background-color: #FFE4E1; border: 1px solid red; }
+
+div.arrow { font-size: 100px; float: left; font-weight: bold; }
 
 div#code { margin: 3px 0 3px 20px }
 
