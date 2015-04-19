@@ -97,7 +97,7 @@ var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
         });
     },
 
-    answerToText: function (answer) { return answer + 1; },
+    answerToText: function (answer) { return answer == undefined ? undefined : answer + 1; },
 });
 
 var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
