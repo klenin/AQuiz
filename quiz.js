@@ -59,7 +59,7 @@ var ChoiceQuestion = $.inherit(Question,
         this.variants = [];
     },
 
-    prepareVariant: function (index, elem) {},
+    prepareVariant: function (elem, index, text) {},
 
     show: function () {
         this.__base();
@@ -68,7 +68,7 @@ var ChoiceQuestion = $.inherit(Question,
             function (elem, i, text) {
                 elem.children('input').attr('id', i + 1);
                 elem.children('label').html(text).attr('for', i + 1);
-                that.prepareVariant(i, elem);
+                that.prepareVariant(elem, i, text);
             });
     },
 });
@@ -81,10 +81,10 @@ var SingleChoiceQuestion = $.inherit(ChoiceQuestion,
             for (var i = 0; i < src.variants.length; ++i)
                 this.variants.push(src.variants[i]);
     },
-    
+
     ui: function () { return $('#singleChoice'); },
 
-    prepareVariant: function (index, elem) {
+    prepareVariant: function (elem, index, text) {
         elem.children('input')[0].checked = this.answer == index;
     },
 
@@ -111,7 +111,7 @@ var MultiChoiceQuestion = $.inherit(ChoiceQuestion,
 
     ui: function () { return $('#multiChoice'); },
 
-    prepareVariant: function (index, elem) {
+    prepareVariant: function (elem, index, text) {
         if (this.answer !== null)
             elem.children('input')[0].checked = this.answer[index];
     },
@@ -143,7 +143,7 @@ var DirectInputQuestion = $.inherit(Question,
     __constructor: function (src) {
         this.__base(src);
     },
-    
+
     ui: function () { return $('#directInput'); },
 
     input: function () { return this.ui().children('input')[0]; },
@@ -155,7 +155,7 @@ var DirectInputQuestion = $.inherit(Question,
 
     rememberAnswer: function () {
         this.answer = this.input().value;
-        if (!this.answer)   
+        if (!this.answer)
             this.answer = null;
     },
 
@@ -174,23 +174,37 @@ var SortableQuestion = $.inherit(Question,
 
     ui: function () { return $('#sortable'); },
 
-    show: function () {
-        this.__base();
+    va: function () { return $('#srVariants'); },
+
+    getVariantList: function () {
         var answer = this.answer;
         if (answer === null) {
             answer = [];
             for (var i = 0; i < this.variants.length; ++i)
                 answer.push(i);
         }
+        return answer;
+    },
+
+    prepareVariant: function (elem, index, text) {
+        elem.attr('value', text).html(this.variants[text]);
+    },
+
+    setVaProperty: function () { this.va().sortable(); },
+
+    show: function () {
+        this.__base();
         var that = this;
-        this.makeVariants(this.ui().children('ul'), answer, function (elem, i, text) {
-            elem.attr('id', text).html(that.variants[text]);
-        }).sortable();
+        this.makeVariants(this.va(), this.getVariantList(),
+            function (elem, i, text) {
+                that.prepareVariant(elem, i, text);
+            });
+        this.setVaProperty();
     },
 
     rememberAnswer: function () {
-        this.answer = $.map(this.ui().children('ul').children('li'), function (elem) {
-            return elem.id ? elem.id : null;
+        this.answer = $.map(this.va().children('li').not('.variantTemplate'), function (elem) {
+            return elem.value;
         });
     },
 
@@ -200,66 +214,98 @@ var SortableQuestion = $.inherit(Question,
     },
 
     isCorrect: function () {
-        for (var i = 0; i < this.answer.length; ++i)
+        for (var i = 0; i < this.correct.length; ++i)
             if (this.answer[i] != this.correct[i])
                 return false;
         return true;
     },
 });
 
-var MatchQuestion = $.inherit(Question,
+var MatchQuestion = $.inherit(SortableQuestion,
 {
     __constructor: function (src) {
-        this.__base(src);
         this.lvariants = [];
-        this.rvariants = [];
-        if (src.variants)
-            for (var i = 0; i < src.variants[0].length; ++i) {
+        if (src.variants) {
+            for (var i = 0; i < src.variants[0].length; ++i)
                 this.lvariants.push(src.variants[0][i]);
-                this.rvariants.push(src.variants[1][i]);
-            }
+            src.variants = src.variants[1];
+        }
+        this.__base(src);
     },
 
     ui: function () { return $('#match'); },
 
-    st: function () { return $('#match #static'); },
+    va: function () { return $('#mtVariants'); },
 
-    so: function () { return $('#match #sortable'); },
+    st: function () { return $('#mtStatic'); },
 
     show: function () {
         this.__base();
-        var answer = this.answer;
-        if (answer === null) {
-            answer = [];
-            for (var i = 0; i < this.lvariants.length; ++i)
-                answer.push(i);
-        }
-        this.makeVariants(this.st().children('ul'), this.lvariants, function (elem, i, text) {
+        this.makeVariants(this.st(), this.lvariants, function (elem, i, text) {
             elem.html(text);
         });
+    },
+});
 
+var ConstructQuestion = $.inherit(SortableQuestion,
+{
+    __constructor: function (src) {
+        this.__base(src);
+        this.answer = [];
+    },
+
+    ui: function () { return $('#construct'); },
+
+    va: function () { return $('#cnVariants'); },
+
+    an: function () { return $('#cnAnswer'); },
+
+    prepareVariant: function (elem, index, text) {
+        elem.attr('value', index).html(text).draggable({
+            connectToSortable: "#cnAnswer",
+            helper: "clone",
+        });
+    },
+
+    setVaProperty: function () {},
+
+    getVariantList: function () { return this.variants; },
+
+    show: function () {
+        this.__base();
         var that = this;
-        this.makeVariants(this.so().children('ul'), answer, function (elem, i, text) {
-            elem.attr('id', text).html(that.rvariants[text]);
-        }).sortable();
+        this.makeVariants(this.an(), this.answer, function (elem, i, text) {
+            elem.attr('value', text).html(that.variants[text]);
+        }).sortable({
+            dropOnEmpty: false,
+
+            over: function(e, ui) {
+                ui.helper.removeClass('removable');
+            },
+
+            out: function(e, ui) {
+                if (ui.helper)
+                    ui.helper.addClass('removable');
+            },
+
+            beforeStop: function(e, ui) {
+                if (ui.helper.hasClass('removable')) {
+                    ui.item.remove();
+                }
+            },
+        });
     },
 
     rememberAnswer: function () {
-        this.answer = $.map(this.so().children('ul').children('li'), function (elem) {
-            return elem.id ? elem.id : null;
+        this.answer = $.map(this.an().children('li').not('.variantTemplate'), function (elem) {
+            return elem.value;
         });
     },
 
-    answerToText: function (answer) {
-        var that = this;
-        return $.map(answer, function (elem) { return that.rvariants[elem]}).join(',');
-    },
-
     isCorrect: function () {
-        for (var i = 0; i < this.answer.length; ++i)
-            if (this.answer[i] != this.correct[i])
-                return false;
-        return true;
+        if (this.correct.length != this.answer.length)
+            return false;
+        return this.__base();
     },
 });
 
@@ -277,6 +323,7 @@ var Quiz = $.inherit(
             di: DirectInputQuestion,
             sr: SortableQuestion,
             mt: MatchQuestion,
+            cn: ConstructQuestion,
         };
         $('#waiting').hide();
         this.currentQuestion = 0;

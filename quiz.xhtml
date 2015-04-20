@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="quiz.css" />
 <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="jquery-ui-1.10.3.custom.min.js"></script> 
+<script type="text/javascript" src="jquery-ui-1.10.3.custom.min.js"></script>
 <script type="text/javascript" src="jquery.inherit-1.1.1.js"></script>
 <script type="text/javascript" src="jquery.localize.js"></script>
 <script type="text/javascript" src="json2.min.js"></script>
@@ -49,27 +49,32 @@
 <input type="text" value="" />
 </div>
 
-<div id="sortable" class="question hidden">
+<div id="sortable" class="question sortable hidden">
 <div class="questionText">Question text</div>
-<ul>
-  <li class="variantTemplate hidden">answer text</li>
+<ul class="sortableList" id="srVariants">
+  <li class="variantTemplate hidden">variant text</li>
 </ul>
 </div>
 
-<div id="match" class="question hidden">
+<div id="match" class="question sortable hidden">
 <div class="questionText">Question text</div>
-<table><tr>
-<th id="static">
-<ul>
+<ul id="mtStatic">
   <li class="variantTemplate hidden">label text</li>
 </ul>
-</th>
-<th id="sortable">
-<ul>
-  <li class="variantTemplate hidden">answer text</li>
+<ul class="sortableList" id="mtVariants">
+  <li class="variantTemplate hidden">variant text</li>
 </ul>
-</th>
-</tr></table>
+</div>
+
+<div id="construct" class="question sortable hidden">
+<div class="questionText">Question text</div>
+<ul class="sortableList" id="cnAnswer">
+  <li class="variantTemplate hidden">answer item text</li>
+</ul>
+<div class="arrow">&#8656;</div>
+<ul class="sortableList" id="cnVariants">
+  <li class="variantTemplate hidden">variant text</li>
+</ul>
 </div>
 
 <div id="checkAnswers" class="hidden">
