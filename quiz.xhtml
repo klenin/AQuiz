@@ -26,8 +26,10 @@
 <span id="submitSuccess" rel="localize[messages.submitSuccess]" class="hidden"/>
 </div>
 
+<div id="questionText">Question text</div>
+<p><select id="optionsSelect" class="hidden"></select></p>
+
 <div id="singleChoice" class="question hidden">
-<div class="questionText">Question text</div>
 <ul>
   <li class="variantTemplate hidden">
     <input type="radio" name="variant" /><label>answer text</label>
@@ -36,7 +38,6 @@
 </div>
 
 <div id="multiChoice" class="question hidden">
-<div class="questionText">Question text</div>
 <ul>
   <li class="variantTemplate hidden">
     <input type="checkbox" name="variant" /><label>answer text</label>
@@ -45,19 +46,16 @@
 </div>
 
 <div id="directInput" class="question hidden">
-<div class="questionText">Question text</div>
 <input type="text" value="" />
 </div>
 
 <div id="sortable" class="question sortable hidden">
-<div class="questionText">Question text</div>
 <ul class="sortableList" id="srVariants">
   <li class="variantTemplate hidden">variant text</li>
 </ul>
 </div>
 
 <div id="match" class="question sortable hidden">
-<div class="questionText">Question text</div>
 <ul id="mtStatic">
   <li class="variantTemplate hidden">label text</li>
 </ul>
@@ -67,7 +65,6 @@
 </div>
 
 <div id="construct" class="question sortable hidden">
-<div class="questionText">Question text</div>
 <ul class="sortableList" id="cnAnswer">
   <li class="variantTemplate hidden">answer item text</li>
 </ul>
