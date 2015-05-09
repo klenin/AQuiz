@@ -45,7 +45,7 @@ var Question = $.inherit(
 
     show: function () {
         var ui = this.ui();
-        $('#questionText').html(this.text);
+        $('#questionText').html(this.text).show();
 
         $('#optionsSelect').hide();
         $('#optionsSelect option').remove();
