@@ -1,6 +1,6 @@
 /*
-    Copyright © 2010-2013 Alexander S. Klenin
-    Copyright © 2013 Natalia D. Zemlyannikova
+    Copyright Â© 2010-2013 Alexander S. Klenin
+    Copyright Â© 2013 Natalia D. Zemlyannikova
     Licensed under GPL version 2 or later.
     http://github.com/klenin/AQuiz
 */
@@ -27,6 +27,7 @@ var Question = $.inherit(
         this.text = src.text;
         this.answer = src.answer === undefined ? null : src.answer;
         this.correct = src.correct;
+        this.options = src.options;
     },
 
     ui: function () {},
@@ -44,7 +45,20 @@ var Question = $.inherit(
 
     show: function () {
         var ui = this.ui();
-        ui.children('.questionText').html(this.text);
+        $('#questionText').html(this.text);
+
+        $('#optionsSelect').hide();
+        $('#optionsSelect option').remove();
+        if (this.options) {
+            var optionsSelect = $('#optionsSelect');
+            optionsSelect.show();
+            $.each(this.options, function(key, value) {   
+                 optionsSelect
+                    .append($('<option>', { 'value' : value, })
+                    .text(value));
+                });
+            optionsSelect.change();
+        }
         ui.show();
     },
 
@@ -62,7 +76,6 @@ var ChoiceQuestion = $.inherit(Question,
     prepareVariant: function (elem, index, text) {},
 
     show: function () {
-        this.__base();
         var that = this;
         this.makeVariants(this.ui().children('ul'), this.variants,
             function (elem, i, text) {
@@ -70,6 +83,7 @@ var ChoiceQuestion = $.inherit(Question,
                 elem.children('label').html(text).attr('for', i + 1);
                 that.prepareVariant(elem, i, text);
             });
+        this.__base();        
     },
 });
 
@@ -149,8 +163,8 @@ var DirectInputQuestion = $.inherit(Question,
     input: function () { return this.ui().children('input')[0]; },
 
     show: function () {
-        this.__base();
         this.input().value = this.answer;
+        this.__base();
     },
 
     rememberAnswer: function () {
@@ -193,13 +207,13 @@ var SortableQuestion = $.inherit(Question,
     setVaProperty: function () { this.va().sortable(); },
 
     show: function () {
-        this.__base();
         var that = this;
         this.makeVariants(this.va(), this.getVariantList(),
             function (elem, i, text) {
                 that.prepareVariant(elem, i, text);
             });
         this.setVaProperty();
+        this.__base();
     },
 
     rememberAnswer: function () {
@@ -210,7 +224,7 @@ var SortableQuestion = $.inherit(Question,
 
     answerToText: function (answer) {
         var that = this;
-        return $.map(answer, function (elem) { return that.variants[elem]}).join(',');
+        return $.map(answer, function (elem) { return elem}).join(',');
     },
 
     isCorrect: function () {
@@ -240,10 +254,10 @@ var MatchQuestion = $.inherit(SortableQuestion,
     st: function () { return $('#mtStatic'); },
 
     show: function () {
-        this.__base();
         this.makeVariants(this.st(), this.lvariants, function (elem, i, text) {
             elem.html(text);
         });
+        this.__base();
     },
 });
 
@@ -272,7 +286,6 @@ var ConstructQuestion = $.inherit(SortableQuestion,
     getVariantList: function () { return this.variants; },
 
     show: function () {
-        this.__base();
         var that = this;
         this.makeVariants(this.an(), this.answer, function (elem, i, text) {
             elem.attr('value', text).html(that.variants[text]);
@@ -294,6 +307,7 @@ var ConstructQuestion = $.inherit(SortableQuestion,
                 }
             },
         });
+        this.__base();
     },
 
     rememberAnswer: function () {
@@ -336,6 +350,8 @@ var Quiz = $.inherit(
         $(['prevQuestion', 'nextQuestion', 'checkAnswers', 'submitAnswers']).each(
             function(i, name) { $('#' + name + 'Button').click(function() { that[name]() }); }
         );
+        var a = $('#optionsSelect');
+        a.change(function() { that.selectLang() });
         $('#controlButtons').show();
         this.showQuestion();
     },
@@ -470,5 +486,12 @@ var Quiz = $.inherit(
         $('#nextQuestionButton')[0].disabled = !this.nextOk();
         $('#prevQuestionButton')[0].disabled = !this.prevOk();
         this.currentGotoButton()[0].disabled = true;
+    },
+
+    selectLang: function () {
+        $.each($('#optionsSelect option'), function (i, item) {
+            var a = item.selected;
+            $('.' + item.value)[item.selected ? 'show' : 'hide']();
+        });
     },
 });
