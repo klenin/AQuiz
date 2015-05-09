@@ -47,18 +47,16 @@ var Question = $.inherit(
         var ui = this.ui();
         $('#questionText').html(this.text).show();
 
-        $('#optionsSelect').hide();
+        var optionsSelect = $('#optionsSelect');
         $('#optionsSelect option').remove();
         if (this.options) {
-            var optionsSelect = $('#optionsSelect');
-            optionsSelect.show();
-            $.each(this.options, function(key, value) {   
-                 optionsSelect
-                    .append($('<option>', { 'value' : value, })
-                    .text(value));
-                });
-            optionsSelect.change();
+            $.each(this.options, function(key, value) {
+                optionsSelect.append($('<option>', { 'value' : value, }).text(value));
+            });
+            optionsSelect.show().change();
         }
+        else
+            optionsSelect.hide();
         ui.show();
     },
 
@@ -350,8 +348,7 @@ var Quiz = $.inherit(
         $(['prevQuestion', 'nextQuestion', 'checkAnswers', 'submitAnswers']).each(
             function(i, name) { $('#' + name + 'Button').click(function() { that[name]() }); }
         );
-        var a = $('#optionsSelect');
-        a.change(function() { that.selectLang() });
+        $('#optionsSelect').change(function() { that.selectOption() });
         $('#controlButtons').show();
         this.showQuestion();
     },
@@ -488,9 +485,8 @@ var Quiz = $.inherit(
         this.currentGotoButton()[0].disabled = true;
     },
 
-    selectLang: function () {
+    selectOption: function () {
         $.each($('#optionsSelect option'), function (i, item) {
-            var a = item.selected;
             $('.' + item.value)[item.selected ? 'show' : 'hide']();
         });
     },
