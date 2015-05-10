@@ -51,7 +51,7 @@ var Question = $.inherit(
         $('#optionsSelect option').remove();
         if (this.options) {
             $.each(this.options, function(key, value) {
-                optionsSelect.append($('<option>', { 'value' : value, }).text(value));
+                optionsSelect.append($('<option>', { 'value' : key }).text(value));
             });
             optionsSelect.show().change();
         }

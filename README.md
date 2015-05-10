@@ -50,7 +50,7 @@ Each question is an object with the following keys:
 * `"variants"`: answer options/choices;
 * `"answer"`: *optional* answer given by student;
 * `"correct"`: *optional* correct answer.
-* `"options"`: *optional* list of selectors for selectively displayed data.
+* `"options"`: *optional* hash of selectors, labels for selectively displayed data.
 
 ##License
 
