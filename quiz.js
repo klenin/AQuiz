@@ -1,5 +1,5 @@
 /*
-    Copyright © 2010-2013 Alexander S. Klenin
+    Copyright © 2010-2016 Alexander S. Klenin
     Copyright © 2013 Natalia D. Zemlyannikova
     Licensed under GPL version 2 or later.
     http://github.com/klenin/AQuiz
@@ -26,7 +26,7 @@ var Question = $.inherit(
     __constructor: function (src) {
         this.text = src.text;
         this.answer = src.answer === undefined ? null : src.answer;
-        this.correct = src.correct;
+        this.correct = src.correct === undefined ? null : src.correct;
         this.options = src.options;
     },
 
@@ -35,11 +35,12 @@ var Question = $.inherit(
     makeVariants: function (variantUI, variants, makeVariant) {
         var variantTemplate = variantUI.children('.variantTemplate');
         variantUI.children().not('.variantTemplate').remove();
-        $.each(variants, function (i, text) {
-            var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
-            makeVariant(elem, i, text);
-            variantUI.append(elem);
-        });
+        if (variants)
+            $.each(variants, function (i, text) {
+                var elem = variantTemplate.clone().removeClass('hidden variantTemplate');
+                makeVariant(elem, i, text);
+                variantUI.append(elem);
+            });
         return variantUI;
     },
 
@@ -81,7 +82,7 @@ var ChoiceQuestion = $.inherit(Question,
                 elem.children('label').html(text).attr('for', i + 1);
                 that.prepareVariant(elem, i, text);
             });
-        this.__base();        
+        this.__base();
     },
 });
 
@@ -263,7 +264,7 @@ var ConstructQuestion = $.inherit(SortableQuestion,
 {
     __constructor: function (src) {
         this.__base(src);
-        this.answer = [];
+        this.answer = null;
     },
 
     ui: function () { return $('#construct'); },
@@ -312,6 +313,8 @@ var ConstructQuestion = $.inherit(SortableQuestion,
         this.answer = $.map(this.an().children('li').not('.variantTemplate'), function (elem) {
             return elem.value;
         });
+        if (!this.answer.length)
+            this.answer = null;
     },
 
     isCorrect: function () {
