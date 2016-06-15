@@ -45,20 +45,24 @@ var Question = $.inherit(
     },
 
     show: function () {
-        var ui = this.ui();
         $('#questionText').html(this.text).show();
-
         var optionsSelect = $('#optionsSelect');
-        $('#optionsSelect option').remove();
+        optionsSelect.children('option').remove();
         if (this.options) {
             $.each(this.options, function(key, value) {
                 optionsSelect.append($('<option>', { 'value' : key }).text(value));
             });
             optionsSelect.show().change();
         }
-        else
-            optionsSelect.hide();
-        ui.show();
+        this.ui().show();
+    },
+
+    hide: function () {
+        $('#questionText').hide();
+        var optionsSelect = $('#optionsSelect');
+        optionsSelect.children('option').remove();
+        optionsSelect.hide();
+        this.ui().hide();
     },
 
     isCorrect: function () { return this.answer == this.correct; },
@@ -471,8 +475,8 @@ var Quiz = $.inherit(
 
     leaveQuestion: function () {
         var q = this.questions[this.currentQuestion];
-        q.ui().hide();
         q.rememberAnswer();
+        q.hide();
         $('#nextQuestionButton')[0].disabled = true;
         $('#prevQuestionButton')[0].disabled = true;
         var b = this.currentGotoButton();
