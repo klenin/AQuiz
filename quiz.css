@@ -15,7 +15,8 @@ ul.sortableList li.removable { background-color: #FFE4E1; border: 1px solid red;
 
 div.arrow { font-size: 100px; float: left; font-weight: bold; }
 
-div#code { margin: 3px 0 3px 20px }
+div.code { margin: 3px 0 2px 15px; }
+div.code code { display: inline-block; padding: 4px; border: 1px dotted #6060F0; }
 
 div#controlButtons { margin: 3px; }
 
